@@ -10,6 +10,7 @@ Module Module1
         Dim t As Stopwatch = New Stopwatch()
 
         'TEST ZONE
+
         'END TEST
 
         While True
