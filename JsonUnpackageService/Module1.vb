@@ -10,7 +10,7 @@ Module Module1
         Dim t As Stopwatch = New Stopwatch()
 
         'TEST ZONE
-        'Test commit
+
         'END TEST
 
         While True
