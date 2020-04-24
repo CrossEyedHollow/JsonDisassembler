@@ -1,0 +1,92 @@
+﻿Imports MySql.Data.MySqlClient
+
+Public Class DBBase
+
+    Protected Sub New()
+    End Sub
+
+    Public Shared Property DBName As String
+    Public Shared Property DBIP As String
+    Public Shared Property DBUser As String
+    Public Shared Property DBPass As String
+    Public Shared Property DBPort As UInteger = 3306
+
+    Public Shared ReadOnly Property DateTimeFormat = "yyyy-MM-dd HH:mm:ss"
+
+    Protected conn As MySqlConnection
+    Protected adapter As MySqlDataAdapter
+    Protected cmd As MySqlCommand
+
+    Public Sub Init()
+        Dim connString As String = ConnectionTools.DataBaseTools.GenerateConnectionString(DBIP, DBUser, DBPass, DBPort)
+        conn = New MySqlConnection(connString)
+        cmd = New MySqlCommand() With {.Connection = conn, .CommandTimeout = 30000}
+        adapter = New MySqlDataAdapter()
+    End Sub
+
+#Region "Direct access"
+    Public Function ReadDatabase(query As String) As DataTable
+        cmd.CommandText = query
+        adapter.SelectCommand = cmd
+        Dim output As New DataTable
+
+        Try
+            If conn.State <> ConnectionState.Open Then conn.Open()
+            adapter.Fill(output)
+        Catch ex As Exception
+            Throw New Exception($"Exception occured While reading from database: '{ex.Message}'")
+        End Try
+
+        Return output
+    End Function
+
+    Public Function Execute(query As String) As Boolean
+        If query = String.Empty Then Return False
+        Dim output As Boolean = False
+
+        'Execute the query
+        cmd.CommandText = query
+        Try
+            If conn.State <> ConnectionState.Open Then conn.Open()
+            Dim i As Integer = cmd.ExecuteNonQuery()
+            output = True
+        Catch ex As Exception
+            Throw New Exception($"Exception occured while writing to Database: '{ex.Message}';")
+        End Try
+
+        'Close connection and return the result
+        Return output
+    End Function
+
+    ''' <summary>
+    ''' Opens connection, executes query and returns the index of the new row
+    ''' </summary>
+    ''' <param name="query"></param>
+    ''' <returns></returns>
+    Public Function ExecuteReturnIndex(query As String) As Integer
+        If query = String.Empty Then Return -1
+        Dim output As Integer = -1
+
+        'Execute the query
+        cmd.CommandText = query
+        Try
+            If conn.State <> ConnectionState.Open Then conn.Open()
+            cmd.ExecuteNonQuery()
+            output = cmd.LastInsertedId
+        Catch ex As Exception
+            Throw New Exception($"Exception occured while writing to Database: '{ex.Message}';")
+        End Try
+
+        'Close connection and return the result
+        Return output
+    End Function
+
+    Public Sub Disconnect()
+        Try
+            If conn.State <> ConnectionState.Closed Then conn.Close()
+        Catch
+        End Try
+    End Sub
+#End Region
+
+End Class
