@@ -10,17 +10,7 @@ Module Module1
         Dim t As Stopwatch = New Stopwatch()
 
         'TEST ZONE
-        'Dim euaTest As EUA = New EUA With {
-        '    .Code = "test",
-        '    .EO_ID = "EO_ID_Test",
-        '    .Event_Time = "20042411",
-        '    .Message_Type = "EUA",
-        '    .F_ID = "F_ID_Test",
-        '    .GetJsonIndex = "123",
-        '    .upUI_1 = New String() {"11", "22", "33"},
-        '    .upUI_2 = New String() {"1", "2", "3"}
-        '}
-        'Dim queryTest = euaTest.GetSqlStatement()
+        'Test commit
         'END TEST
 
         While True
