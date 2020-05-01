@@ -20,15 +20,14 @@ Public Class EPA
 
         Select Case Aggregation_Type
             Case AggregationType.Unit_Packets_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldParentCode = '{aUI}' " 'TODO EPA field is not updated, fix
+                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldEPA = '{GetJsonIndex}', fldParentCode = '{aUI}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", Aggregated_UIs1)}');"
             Case AggregationType.Aggregated_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldParentCode = '{aUI}' "
+                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldEPA = '{GetJsonIndex}', fldParentCode = '{aUI}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", Aggregated_UIs2)}');"
             Case AggregationType.Both
-                Throw New Exception("Doba doba doo")
                 output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` AS P, `{DBBase.DBName}`.`tblaggregatedcodes` AS A "
-                output += $"SET P.fldParentCode = '{aUI}', A.fldParentCode = '{aUI}' "
+                output += $"SET P.fldEPA = '{GetJsonIndex}', P.fldParentCode = '{aUI}', A.fldEPA = '{GetJsonIndex}', A.fldParentCode = '{aUI}' "
                 output += $"WHERE P.fldPrintCode in ('{String.Join("','", Aggregated_UIs1)}') "
                 output += $"AND A.fldPrintCode in ('{String.Join("','", Aggregated_UIs2)}');"
             Case Else
