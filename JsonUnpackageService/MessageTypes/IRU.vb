@@ -22,17 +22,17 @@ Public Class IRU
     Public Property P_OtherID As String
     Public Property upUI As String()
     Public Property P_weight As Decimal
-    Public Property Order_Req_Quantity As Integer
+    Public Property Order_Req_Quantity As String
     Public Property Order_number As String
 
     Public Overrides Function GetSqlStatement() As String
         Dim output As String = ""
         Dim eTime = If(Event_Time = Nothing, "NOW()", $"'{JsonDatetime.ParseTime(Event_Time).ToMySQL()}'")
         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` "
-        output += "(fldCode, fldJSONid) "
+        output += "(fldCode, fldIssueDate, fldJSONid) "
         output += "VALUES ('"
-        output += String.Join($"',{GetJsonIndex}),('", upUI)
-        output += $"',{GetJsonIndex}); "
+        output += String.Join($"',{eTime},{GetJsonIndex}),('", upUI)
+        output += $"',{eTime},{GetJsonIndex}); "
         Dim second As String = ""
         'Add insert to 2nd IRU specific table
         second += $"INSERT INTO `{DBBase.DBName}`.`tbliru` "

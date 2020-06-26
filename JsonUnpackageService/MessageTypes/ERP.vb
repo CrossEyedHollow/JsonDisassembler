@@ -14,28 +14,29 @@ Public Class ERP
 
     Public Overrides Function GetSqlStatement() As String
         Dim output As String = ""
+        Dim eventTime As String = JsonDatetime.ParseTime(Event_Time).ToMySQL()
         output += $"INSERT INTO `{DBBase.DBName}`.`tblarrival` (fldEvent_Time,fldEO_ID,fldF_ID,fldReturnType,fldUpUIs,fldAUIs,fldComment,fldJsonID) "
-        output += $"VALUES ('{JsonDatetime.ParseTime(Event_Time).ToMySQL()}','{EO_ID}','{F_ID}','{Product_Return}','{Arrival_comment}','{GetJsonIndex}'); "
+        output += $"VALUES ('{eventTime}','{EO_ID}','{F_ID}','{Product_Return}','{Arrival_comment}','{GetJsonIndex}'); "
 
         Select Case Product_Return
             Case 0 'New products
                 'Insert as new codes
                 Select Case UI_Type
                     Case AggregationType.Unit_Packets_Only
-                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` (fldCode, fldERP) VALUES ('"
-                        output += String.Join($"',{GetJsonIndex}),('", upUIs)
-                        output += $"',{GetJsonIndex}); "
+                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` (fldCode, fldIssueDate, fldERP) VALUES ('"
+                        output += String.Join($"', '{eventTime}',{GetJsonIndex}),('", upUIs)
+                        output += $"','{eventTime}',{GetJsonIndex}); "
                     Case AggregationType.Aggregated_Only
-                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tbljsonsecondary` (fldCode, fldERP) VALUES ('"
-                        output += String.Join($"',{GetJsonIndex}),('", upUIs)
-                        output += $"',{GetJsonIndex}); "
+                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldCode, fldPrintDate, fldERP) VALUES ('"
+                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
+                        output += $"','{eventTime}',{GetJsonIndex}); "
                     Case AggregationType.Both
-                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` (fldCode, fldERP) VALUES ('"
-                        output += String.Join($"',{GetJsonIndex}),('", upUIs)
-                        output += $"',{GetJsonIndex}); "
-                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tbljsonsecondary` (fldCode, fldERP) VALUES ('"
-                        output += String.Join($"',{GetJsonIndex}),('", upUIs)
-                        output += $"',{GetJsonIndex}); "
+                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` (fldCode, fldIssueDate, fldERP) VALUES ('"
+                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
+                        output += $"','{eventTime}',{GetJsonIndex}); "
+                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldCode, fldPrintDate, fldERP) VALUES ('"
+                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
+                        output += $"','{eventTime}',{GetJsonIndex}); "
                     Case Else
                         Throw New NotImplementedException($"Ui_type '{UI_Type}' does not exist.")
                 End Select
