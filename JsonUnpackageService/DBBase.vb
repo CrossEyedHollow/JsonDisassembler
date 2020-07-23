@@ -18,9 +18,17 @@ Public Class DBBase
     Protected cmd As MySqlCommand
 
     Public Sub Init()
-        Dim connString As String = ConnectionTools.DataBaseTools.GenerateConnectionString(DBIP, DBUser, DBPass, DBPort)
-        conn = New MySqlConnection(connString)
-        cmd = New MySqlCommand() With {.Connection = conn, .CommandTimeout = 30000}
+        'Generate connection string
+        Dim cBuilder As MySqlConnectionStringBuilder = New MySqlConnectionStringBuilder() With {
+            .Server = DBIP,
+            .UserID = DBUser,
+            .Password = DBPass,
+            .Port = DBPort,
+            .SslMode = MySqlSslMode.None}
+
+        'Instantiate necessary objects
+        conn = New MySqlConnection(cBuilder.ConnectionString)
+        cmd = New MySqlCommand() With {.Connection = conn}
         adapter = New MySqlDataAdapter()
     End Sub
 
