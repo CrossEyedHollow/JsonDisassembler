@@ -15,7 +15,7 @@ Public Class ERP
     Public Overrides Function GetSqlStatement() As String
         Dim output As String = ""
         Dim eventTime As String = JsonDatetime.ParseTime(Event_Time).ToMySQL()
-        output += $"INSERT INTO `{DBBase.DBName}`.`tblarrival` (fldEvent_Time,fldEO_ID,fldF_ID,fldReturnType,fldUpUIs,fldAUIs,fldComment,fldJsonID) "
+        output += $"INSERT INTO `{DBBase.DBName}`.`tblarrival` (fldEvent_Time,fldEO_ID,fldF_ID,fldReturnType,fldComment,fldJsonID) "
         output += $"VALUES ('{eventTime}','{EO_ID}','{F_ID}','{Product_Return}','{Arrival_comment}','{GetJsonIndex}'); "
 
         Select Case Product_Return
