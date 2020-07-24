@@ -28,14 +28,14 @@ Public Class ERP
                         output += $"','{eventTime}',{GetJsonIndex}); "
                     Case AggregationType.Aggregated_Only
                         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldCode, fldPrintDate, fldERP) VALUES ('"
-                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
+                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", aUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
                     Case AggregationType.Both
                         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` (fldCode, fldIssueDate, fldERP) VALUES ('"
                         output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
                         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldCode, fldPrintDate, fldERP) VALUES ('"
-                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
+                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", aUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
                     Case Else
                         Throw New NotImplementedException($"Ui_type '{UI_Type}' does not exist.")
