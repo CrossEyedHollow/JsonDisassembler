@@ -69,10 +69,6 @@ Module Module1
 
     End Sub
 
-    Private Sub UnpackIRUs()
-
-    End Sub
-
     Private Sub FillMessageType(table As String)
         Dim query As String = $"SELECT * FROM {DBBase.DBName}.{table} WHERE fldType = '' LIMIT 10000;"
 
