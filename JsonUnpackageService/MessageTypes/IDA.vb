@@ -17,12 +17,13 @@ Public Class IDA
     End Function
 
     Public Overrides Function GetSqlStatement() As String
-        Throw New NotImplementedException()
         Select Case Deact_Type
             Case AggregationType.Unit_Packets_Only
                 Return $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldIDA = '{GetJsonIndex}' WHERE fldCode in ('{String.Join("','", Deact_upUI)}')"
             Case AggregationType.Aggregated_Only
                 Return $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldIDA = '{GetJsonIndex}' WHERE fldPrintCode in ('{String.Join("','", Deact_aUI)}')"
+            Case Else
+                Throw New Exception("Should be unreachable")
         End Select
     End Function
 End Class
