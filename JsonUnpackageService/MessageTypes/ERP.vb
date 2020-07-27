@@ -27,14 +27,14 @@ Public Class ERP
                         output += String.Join($"', '{eventTime}',{GetJsonIndex}),('", upUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
                     Case AggregationType.Aggregated_Only
-                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldCode, fldPrintDate, fldERP) VALUES ('"
+                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldPrintCode, fldPrintDate, fldERP) VALUES ('"
                         output += String.Join($"','{eventTime}',{GetJsonIndex}),('", aUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
                     Case AggregationType.Both
                         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` (fldCode, fldIssueDate, fldERP) VALUES ('"
                         output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
-                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldCode, fldPrintDate, fldERP) VALUES ('"
+                        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldPrintCode, fldPrintDate, fldERP) VALUES ('"
                         output += String.Join($"','{eventTime}',{GetJsonIndex}),('", aUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
                     Case Else
