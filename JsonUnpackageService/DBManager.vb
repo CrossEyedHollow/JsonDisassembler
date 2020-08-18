@@ -54,7 +54,7 @@ Public Class DBManager
 
 #Region "Queries"
     Private Function CheckForNewJSONs(table As String) As String
-        Return $"SELECT * FROM `{DBName}`.{table} WHERE fldUnpacked is null and fldType <> 'FLS' ORDER BY fldType, fldIndex;"
+        Return $"SELECT * FROM `{DBName}`.{table} WHERE fldUnpacked is null and fldType = 'IRU' ORDER BY fldType, fldIndex;"
     End Function
 
     Private Function CheckForNewJSONs(table As String, msgType As String) As String
