@@ -14,20 +14,20 @@ Public Class EPA
 
     Public Overrides Function GetSqlStatement() As String
         Dim output As String = ""
-
+        Dim eTime As String = ParseTime(Event_Time).ToMySQL()
         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldPrintCode, fldPrintDate, fldJSONid) "
-        output += $"VALUES ('{aUI}', '{JsonDatetime.ParseTime(Event_Time).ToMySQL()}', {GetJsonIndex}); "
+        output += $"VALUES ('{aUI}', '{eTime}', {GetJsonIndex}); "
 
         Select Case Aggregation_Type
             Case AggregationType.Unit_Packets_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldEPA = '{GetJsonIndex}', fldParentCode = '{aUI}' "
+                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldEPA = '{GetJsonIndex}', fldParentCode = '{aUI}', fldAggregatedDate = '{eTime}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", Aggregated_UIs1)}');"
             Case AggregationType.Aggregated_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldEPA = '{GetJsonIndex}', fldParentCode = '{aUI}' "
+                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldEPA = '{GetJsonIndex}', fldParentCode = '{aUI}', fldAggregatedDate = '{eTime}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", Aggregated_UIs2)}');"
             Case AggregationType.Both
                 output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` AS P, `{DBBase.DBName}`.`tblaggregatedcodes` AS A "
-                output += $"SET P.fldEPA = '{GetJsonIndex}', P.fldParentCode = '{aUI}', A.fldEPA = '{GetJsonIndex}', A.fldParentCode = '{aUI}' "
+                output += $"SET P.fldEPA = '{GetJsonIndex}', P.fldParentCode = '{aUI}', P.fldAggregatedDate = '{eTime}', A.fldEPA = '{GetJsonIndex}', A.fldParentCode = '{aUI}', A.fldAggregatedDate = '{eTime}' "
                 output += $"WHERE P.fldPrintCode in ('{String.Join("','", Aggregated_UIs1)}') "
                 output += $"AND A.fldPrintCode in ('{String.Join("','", Aggregated_UIs2)}');"
             Case Else
