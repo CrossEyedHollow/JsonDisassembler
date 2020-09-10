@@ -27,12 +27,12 @@ Public Class IRU
 
     Public Overrides Function GetSqlStatement() As String
         Dim output As String = ""
-        Dim eTime = If(Event_Time = Nothing, "NOW()", $"'{JsonDatetime.ParseTime(Event_Time).ToMySQL()}'")
+        Dim eTime = If(Event_Time = Nothing, "NOW()", $"'{ParseTime(Event_Time).ToMySQL()}'")
         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` "
-        output += "(fldCode, fldIssueDate, fldJSONid) "
+        output += "(fldCode, fldIssueDate, fldLocation, fldJSONid) "
         output += "VALUES ('"
-        output += String.Join($"',{eTime},{GetJsonIndex}),('", upUI)
-        output += $"',{eTime},{GetJsonIndex}); "
+        output += String.Join($"',{eTime},'{F_ID}',{GetJsonIndex}),('", upUI)
+        output += $"',{eTime},'{F_ID}',{GetJsonIndex}); "
         Dim second As String = ""
         'Add insert to 2nd IRU specific table
         second += $"INSERT INTO `{DBBase.DBName}`.`tbliru` "

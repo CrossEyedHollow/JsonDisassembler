@@ -101,5 +101,12 @@ JsonUnpackageService
  </summary>
  <returns></returns>
 </member>
+<member name="M:JsonUnpackageService.PriorityTracker.GetJsonType">
+ <summary>
+ Each time this function is called, it returns the current item and jumps to the next one,
+ after the last items, returns string.Empty once and resets
+ </summary>
+ <returns></returns>
+</member>
 </members>
 </doc>

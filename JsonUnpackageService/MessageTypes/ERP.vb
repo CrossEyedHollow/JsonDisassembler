@@ -44,14 +44,15 @@ Public Class ERP
                 'Update all codes ERP column, clean Dispatchment (fldEDP)
                 Select Case UI_Type
                     Case AggregationType.Unit_Packets_Only
-                        output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldERP = '{GetJsonIndex}', fldEDP = NULL "
+                        output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldERP = '{GetJsonIndex}', fldEDP = NULL, fldLocation = '{F_ID}' "
                         output += $"WHERE fldPrintCode in ({String.Join(",", upUIs)});"
                     Case AggregationType.Aggregated_Only
-                        output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldERP = '{GetJsonIndex}', fldEDP = NULL "
+                        output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldERP = '{GetJsonIndex}', fldEDP = NULL, fldLocation = '{F_ID}' "
                         output += $"WHERE fldPrintCode in ({String.Join(",", aUIs)});"
                     Case AggregationType.Both
                         output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` AS P, `{DBBase.DBName}`.`tblaggregatedcodes` AS A "
-                        output += $"SET P.fldERP = '{GetJsonIndex}', P.fldEDP = NULL, A.fldERP = '{GetJsonIndex}', A.fldEDP = NULL "
+                        output += $"SET P.fldERP = '{GetJsonIndex}', P.fldEDP = NULL, P.fldLocation = '{F_ID}', "
+                        output += $"A.fldERP = '{GetJsonIndex}', A.fldEDP = NULL, A.fldLocation = '{F_ID}' "
                         output += $"WHERE P.fldPrintCode in ({String.Join(",", upUIs)}) "
                         output += $"AND A.fldPrintCode in ({String.Join(",", aUIs)});"
                     Case Else
