@@ -117,7 +117,6 @@ Module Module1
         db = New DBManager()
 
         'DBBase db = New DBBase()
-
     End Sub
 End Module
 

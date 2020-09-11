@@ -37,7 +37,7 @@ Public Class EDP
         Dim output As String = ""
         output += $"INSERT INTO `{DBBase.DBName}`.`tbldeployment` "
         output += "(fldEvent_Time,fldEO_ID,fldF_ID,fldDestID1,fldDestID2,fldDestID3,fldDestID4,fldDestAddress,fldDestinationStreet1,fldDestinationStreet2,fldDestinationCity,fldDestPostCode,fldTransportMode,fldTransportVehicle,fldTransportCont1,fldTransporCont2,fldTransportS1,fldTransportS2,fldEMCS,fldEMCS_ARC,fldSAAD,fldSAAD_Num,fldExpDeclaration,fldExpDeclNumber,fldComment,fldJsonID) "
-        output += $"VALUES ('{JsonDatetime.ParseTime(Event_Time).ToMySQL()}','{EO_ID}','{F_ID}','{Destination_ID1}','{Destination_ID2}','{String.Join("','", If(Destination_ID3, New String() {}))}','{String.Join("','", If(Destination_ID4, New String() {}))}','{Destination_ID5}','{Destination_ID5_Address_StreetOne}','{Destination_ID5_Address_StreetTwo}','{Destination_ID5_Address_City}','{Destination_ID5_Address_PostCode}'," &
+        output += $"VALUES ('{ParseTime(Event_Time).ToMySQL()}','{EO_ID}','{F_ID}','{Destination_ID1}','{Destination_ID2}',""'{String.Join("','", If(Destination_ID3, New String() {}))}'"",""'{String.Join("','", If(Destination_ID4, New String() {}))}'"",'{Destination_ID5}','{Destination_ID5_Address_StreetOne}','{Destination_ID5_Address_StreetTwo}','{Destination_ID5_Address_City}','{Destination_ID5_Address_PostCode}'," &
             $"'{CInt(Transport_mode)}','{Transport_vehicle}','{Transport_cont1}','{Transport_cont2}','{Transport_s1}','{Transport_s2}'," &
             $"'{EMCS}','{EMCS_ARC}','{SAAD}','{SAAD_number}','{Exp_Declaration}','{Exp_DeclarationNumber}','{Dispatch_comment}','{GetJsonIndex}'); "
         output = output.Replace("''", "null")

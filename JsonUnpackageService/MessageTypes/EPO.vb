@@ -5,7 +5,7 @@ Public Class EPO
 
     Public Property EO_ID As String
     Public Property Event_Time As String
-    Public Property Order_Number As Integer
+    Public Property Order_Number As String
     Public Property Order_Date As String
     Public Property UI_Type As AggregationType
     Public Property upUIs As String()

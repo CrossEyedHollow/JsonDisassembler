@@ -6,7 +6,7 @@ Public Class Message
     Public Property Message_Type As String
 
     Public Overridable Function GetSqlStatement() As String
-        Throw New InvalidOperationException()
+        Throw New InvalidOperationException($"Message Type: {Message_Type} not implemented")
     End Function
 
     Public Overridable Function GetReport() As String

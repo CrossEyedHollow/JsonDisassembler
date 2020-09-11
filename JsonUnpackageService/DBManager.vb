@@ -23,7 +23,7 @@ Public Class DBManager
     'End Function
 
     Public Function CheckSecondaryTable() As DataTable
-        Dim query As String = $"SELECT * FROM `{DBName}`.`tbljsonsecondary` WHERE fldUnpacked IS NULL AND fldType = 'IRU' OR fldType = 'ERP' ORDER BY FIELD(fldType, 'IRU', 'ERP'); "
+        Dim query As String = $"SELECT * FROM `{DBName}`.`tbljsonsecondary` WHERE fldUnpacked IS NULL AND (fldType = 'IRU' OR fldType = 'ERP') ORDER BY FIELD(fldType, 'IRU', 'ERP'); "
         Return ReadDatabase(query)
     End Function
 
