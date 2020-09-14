@@ -28,7 +28,7 @@ Public Class DBManager
     End Function
 
     Public Function CheckPrimaryTable() As DataTable
-        Dim query As String = $"SELECT * FROM `{DBName}`.`tbljson` WHERE fldUnpacked IS NULL ORDER BY FIELD(fldType, 'EPA', 'EUA') DESC; "
+        Dim query As String = $"SELECT * FROM `{DBName}`.`tbljson` WHERE fldUnpacked IS NULL and JSON_EXTRACT(fldResponse, '$.Error') = 0 ORDER BY FIELD(fldType, 'EPA', 'EUA') DESC; "
         Return ReadDatabase(query)
     End Function
 
