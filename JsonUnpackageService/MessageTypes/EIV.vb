@@ -39,7 +39,7 @@ Public Class EIV
         output += "fldProduct_Items_TPIDs,fldProduct_Items_N,fldProduct_Items_Price,fldValue,fldCurrency,fldComment,fldJsonID) "
         output += $"VALUES ('{JsonDatetime.ParseTime(Event_Time).ToMySQL()}','{EO_ID}','{CInt(Invoice_Type1)}','{Invoice_Type2}','{Invoice_Number}','{JsonDatetime.ParseDate(Invoice_Date).ToMySQL()}',"
         output += $"'{Invoice_Seller}','{Invoice_Buyer1}','{Invoice_Buyer2}','{Buyer_Name}','{Buyer_Address}','{Buyer_Address_StreetOne}','{Buyer_Address_StreetTwo}','{Buyer_Address_City}','{Buyer_Address_PostCode}','{Buyer_CountryReg}','{Buyer_TAX_N}','{First_Seller_EU}',"
-        output += $"'{String.Join(",", If(Product_Items_1 Is Nothing, New String() {}, Product_Items_1))}','{String.Join(",", If(IsDBNull(Product_Items_2), New String() {}, Product_Items_2))}','{String.Join(",", If(IsDBNull(Product_Price), New String() {}, Product_Price))}','{Invoice_Net}','{Invoice_Currency}',"
+        output += $"'{String.Join(",", If(Product_Items_1 Is Nothing, New String() {}, Product_Items_1))}','{String.Join(",", If(IsDBNull(Product_Items_2), New Integer() {}, Product_Items_2))}','{(String.Join(",", If(IsDBNull(Product_Price), New Decimal() {}, Product_Price))).Replace(",", ".")}','{Invoice_Net}','{Invoice_Currency}',"
         output += $"'{Invoice_comment}','{GetJsonIndex}'); "
         output = output.Replace("''", "null")
         'TODO Finish
