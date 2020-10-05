@@ -15,8 +15,8 @@ Public Class EPA
     Public Overrides Function GetSqlStatement() As String
         Dim output As String = ""
         Dim eTime As String = ParseTime(Event_Time).ToMySQL()
-        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldPrintCode, fldPrintDate, fldJSONid) "
-        output += $"VALUES ('{aUI}', '{eTime}', {GetJsonIndex}); "
+        output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldPrintCode, fldLocation, fldPrintDate, fldJSONid) "
+        output += $"VALUES ('{aUI}', '{F_ID}', '{eTime}', {GetJsonIndex}); "
 
         Select Case Aggregation_Type
             Case AggregationType.Unit_Packets_Only
