@@ -11,22 +11,32 @@ Module Module1
         Intitialize()
 
         While True
+            Dim result As DataTable
 
-            'Check the messages from the router first
-            Dim result As DataTable = db.CheckSecondaryTable()
+            'Check IRUs
+            result = db.CheckTable(Tables.tbljsonsecondary, "IRU")
+            'Process them
+            ProcessMessages(result, Tables.tbljsonsecondary.ToString())
 
-            'If there are any messages
-            If result.Rows.Count > 0 Then
-                'Process them
-                ProcessMessages(result, Tables.tbljsonsecondary.ToString())
-            End If
+            '2nd EUA
+            result = db.CheckTable(Tables.tbljson, "EUA")
+            'Process them
+            ProcessMessages(result, Tables.tbljson.ToString())
 
-            'Check the messages from the facility
+            '3rd EPA
+            result = db.CheckTable(Tables.tbljson, "EPA")
+            'Process them
+            ProcessMessages(result, Tables.tbljson.ToString())
+
+            'Check the rest of the messages from the router
+            result = db.CheckSecondaryTable()
+            'Process them
+            ProcessMessages(result, Tables.tbljsonsecondary.ToString())
+
+            'Check all else from facility
             result = db.CheckPrimaryTable()
-            If result.Rows.Count > 0 Then
-                'Process them
-                ProcessMessages(result, Tables.tbljson.ToString())
-            End If
+            'Process them
+            ProcessMessages(result, Tables.tbljson.ToString())
 
             'Disconnect from the db
             db.Disconnect()
@@ -38,35 +48,37 @@ Module Module1
     End Sub
 
     Private Sub ProcessMessages(messages As DataTable, sourceTable As String)
-        For Each row As DataRow In messages.Rows
-            'Get the Json Index
-            Dim index = Convert.ToInt32(row("fldIndex"))
+        If messages.Rows.Count > 0 Then
+            For Each row As DataRow In messages.Rows
+                'Get the Json Index
+                Dim index = Convert.ToInt32(row("fldIndex"))
 
-            'Try to process the idividual message
-            Try
-                'Start timer
-                T.Restart()
-                'Deserializer JSON
-                Dim strJson As JObject = JObject.Parse(row("fldJson"))
-                Dim msg As Message = JsonUnpackager.Unpack(strJson)
-                msg.GetJsonIndex = index
-                'Save the time it took to process message
-                Dim proccessTime As TimeSpan = T.Elapsed()
-                T.Restart()
-                'Insert into database
-                Dim query As String = msg.GetSqlStatement()
-                db.Execute(query)
-                'Save the query execution time
-                T.Stop()
-                Dim queryTime As TimeSpan = T.Elapsed
-                'Mark JSON as Upacked
-                db.UpdateJsonStatus(msg.GetJsonIndex, sourceTable)
-                'Report success
-                ReportTools.Output.ToConsole(msg.GetReport() & $" Proccess time: {proccessTime.TotalSeconds.ToString("N3")}s, SQL time: {queryTime.TotalSeconds.ToString("N3")}s.")
-            Catch ex As Exception
-                ReportTools.Output.Report($"Failed to process JSON with id: {index}, reason: {ex.Message}")
-            End Try
-        Next
+                'Try to process the idividual message
+                Try
+                    'Start timer
+                    T.Restart()
+                    'Deserializer JSON
+                    Dim strJson As JObject = JObject.Parse(row("fldJson"))
+                    Dim msg As Message = JsonUnpackager.Unpack(strJson)
+                    msg.GetJsonIndex = index
+                    'Save the time it took to process message
+                    Dim proccessTime As TimeSpan = T.Elapsed()
+                    T.Restart()
+                    'Insert into database
+                    Dim query As String = msg.GetSqlStatement()
+                    db.Execute(query)
+                    'Save the query execution time
+                    T.Stop()
+                    Dim queryTime As TimeSpan = T.Elapsed
+                    'Mark JSON as Upacked
+                    db.UpdateJsonStatus(msg.GetJsonIndex, sourceTable)
+                    'Report success
+                    ReportTools.Output.ToConsole(msg.GetReport() & $" Proccess time: {proccessTime.TotalSeconds.ToString("N3")}s, SQL time: {queryTime.TotalSeconds.ToString("N3")}s.")
+                Catch ex As Exception
+                    ReportTools.Output.Report($"Failed to process JSON with id: {index}, reason: {ex.Message}")
+                End Try
+            Next
+        End If
     End Sub
 
     Private Sub FillMessageType(table As String)

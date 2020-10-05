@@ -32,6 +32,19 @@ Public Class DBManager
         Return ReadDatabase(query)
     End Function
 
+    Public Function CheckTable(table As Tables, type As String) As DataTable
+        Dim query As String = ""
+        Select Case table
+            Case Tables.tbljson
+                query = $"SELECT * FROM `{DBName}`.`{table.ToString()}` WHERE fldUnpacked IS NULL AND JSON_EXTRACT(fldResponse, '$.Error') = 0" & If(String.IsNullOrEmpty(type), ";", $" AND fldType = '{type}';")
+            Case Tables.tbljsonsecondary
+                query = $"Select * FROM `{DBName}`.`{table.ToString()}` WHERE fldUnpacked Is NULL" & If(String.IsNullOrEmpty(type), ";", $" AND fldType = '{type}';")
+            Case Else
+                Throw New Exception("CheckTable() exception, Should be unreachable.")
+        End Select
+        Return ReadDatabase(query)
+    End Function
+
     Public Sub UpdateJsonStatus(index As Integer, table As String)
         Dim query As String = $"UPDATE `{DBName}`.`{table}` SET fldUnpacked = NOW() WHERE fldIndex = {index};"
         Execute(query)
