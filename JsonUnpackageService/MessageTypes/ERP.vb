@@ -24,7 +24,7 @@ Public Class ERP
                 Select Case UI_Type
                     Case AggregationType.Unit_Packets_Only
                         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` (fldCode, fldIssueDate, fldERP) VALUES ('"
-                        output += String.Join($"', '{eventTime}',{GetJsonIndex}),('", upUIs)
+                        output += String.Join($"','{eventTime}',{GetJsonIndex}),('", upUIs)
                         output += $"','{eventTime}',{GetJsonIndex}); "
                     Case AggregationType.Aggregated_Only
                         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblaggregatedcodes` (fldPrintCode, fldPrintDate, fldERP) VALUES ('"
@@ -45,16 +45,16 @@ Public Class ERP
                 Select Case UI_Type
                     Case AggregationType.Unit_Packets_Only
                         output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldERP = '{GetJsonIndex}', fldEDP = NULL, fldLocation = '{F_ID}' "
-                        output += $"WHERE fldPrintCode in ({String.Join(",", upUIs)});"
+                        output += $"WHERE fldPrintCode in ('{String.Join("','", upUIs)}');"
                     Case AggregationType.Aggregated_Only
                         output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldERP = '{GetJsonIndex}', fldEDP = NULL, fldLocation = '{F_ID}' "
-                        output += $"WHERE fldPrintCode in ({String.Join(",", aUIs)});"
+                        output += $"WHERE fldPrintCode in ('{String.Join("','", aUIs)}');"
                     Case AggregationType.Both
                         output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` AS P, `{DBBase.DBName}`.`tblaggregatedcodes` AS A "
                         output += $"SET P.fldERP = '{GetJsonIndex}', P.fldEDP = NULL, P.fldLocation = '{F_ID}', "
                         output += $"A.fldERP = '{GetJsonIndex}', A.fldEDP = NULL, A.fldLocation = '{F_ID}' "
-                        output += $"WHERE P.fldPrintCode in ({String.Join(",", upUIs)}) "
-                        output += $"AND A.fldPrintCode in ({String.Join(",", aUIs)});"
+                        output += $"WHERE P.fldPrintCode in ('{String.Join("','", upUIs)}') "
+                        output += $"AND A.fldPrintCode in ('{String.Join("','", aUIs)}');"
                     Case Else
                         Throw New NotImplementedException($"Ui_type '{UI_Type}' does not exist.")
                 End Select
