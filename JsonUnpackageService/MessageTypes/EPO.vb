@@ -13,7 +13,7 @@ Public Class EPO
     Public Property Comments As String
 
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}'"
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}'"
     End Function
 End Class
 

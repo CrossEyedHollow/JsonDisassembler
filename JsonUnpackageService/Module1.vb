@@ -60,7 +60,7 @@ Module Module1
                     'Deserializer JSON
                     Dim strJson As JObject = JObject.Parse(row("fldJson"))
                     Dim msg As Message = JsonUnpackager.Unpack(strJson)
-                    msg.GetJsonIndex = index
+                    'msg.GetJsonIndex = index ''OBSOLETE
                     'Save the time it took to process message
                     Dim proccessTime As TimeSpan = T.Elapsed()
                     T.Restart()
@@ -71,9 +71,9 @@ Module Module1
                     T.Stop()
                     Dim queryTime As TimeSpan = T.Elapsed
                     'Mark JSON as Upacked
-                    db.UpdateJsonStatus(msg.GetJsonIndex, sourceTable)
+                    db.UpdateJsonStatus(index, sourceTable)
                     'Report success
-                    ReportTools.Output.ToConsole(msg.GetReport() & $" Proccess time: {proccessTime.TotalSeconds.ToString("N3")}s, SQL time: {queryTime.TotalSeconds.ToString("N3")}s.")
+                    ReportTools.Output.ToConsole(msg.GetReport() & $" Proccess time: {proccessTime.TotalSeconds:N3}s, SQL time: {queryTime.TotalSeconds:N3}s.")
                 Catch ex As Exception
                     ReportTools.Output.Report($"Failed to process JSON with id: {index}, reason: {ex.Message}")
                 End Try

@@ -1,7 +1,7 @@
 ﻿Imports Newtonsoft.Json.Linq
 
 Public Class Message
-    Public Property GetJsonIndex() As Integer
+    'Public Property GetJsonIndex() As Integer
     Public Property Code As String
     Public Property Message_Type As String
 

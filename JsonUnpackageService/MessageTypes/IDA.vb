@@ -13,15 +13,15 @@ Public Class IDA
     Public Property Deact_aUI As String()
 
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}'"
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}'"
     End Function
 
     Public Overrides Function GetSqlStatement() As String
         Select Case Deact_Type
             Case AggregationType.Unit_Packets_Only
-                Return $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldIDA = '{GetJsonIndex}' WHERE fldCode in ('{String.Join("','", Deact_upUI)}')"
+                Return $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldIDA = '{Code}' WHERE fldCode in ('{String.Join("','", Deact_upUI)}')"
             Case AggregationType.Aggregated_Only
-                Return $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldIDA = '{GetJsonIndex}' WHERE fldPrintCode in ('{String.Join("','", Deact_aUI)}')"
+                Return $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldIDA = '{Code}' WHERE fldPrintCode in ('{String.Join("','", Deact_aUI)}')"
             Case Else
                 Throw New Exception("Should be unreachable")
         End Select

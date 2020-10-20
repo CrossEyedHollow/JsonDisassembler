@@ -31,15 +31,15 @@ Public Class IRU
         output += $"INSERT IGNORE INTO `{DBBase.DBName}`.`tblprimarycodes` "
         output += "(fldCode, fldIssueDate, fldLocation, fldJSONid) "
         output += "VALUES ('"
-        output += String.Join($"',{eTime},'{F_ID}',{GetJsonIndex}),('", upUI)
-        output += $"',{eTime},'{F_ID}',{GetJsonIndex}); "
+        output += String.Join($"',{eTime},'{F_ID}','{Code}'),('", upUI)
+        output += $"',{eTime},'{F_ID}','{Code}'); "
         Dim second As String = ""
         'Add insert to 2nd IRU specific table
         second += $"INSERT INTO `{DBBase.DBName}`.`tbliru` "
         second += "(fldJSON, fldEvent_Time, fldEO_ID, fldF_ID, fldM_ID, fldProcess_Type, fldP_Type, fldP_OtherType, "
         second += "fldP_CN, fldP_Brand, fldTP_ID, fldTP_PN, fldIntended_Market, fldIntended_Route1, fldIntended_Route2, "
         second += "fldImport, fldReq_Quantity, fldP_OtherID, fldPWeight, fldOrderReqQuantity, fldOrderNumber) VALUES "
-        second += $"({GetJsonIndex}, {eTime}, '{EO_ID}', '{F_ID}', '{M_ID}', {Process_Type}, {P_Type}, '{P_OtherType}', "
+        second += $"('{Code}', {eTime}, '{EO_ID}', '{F_ID}', '{M_ID}', {Process_Type}, {P_Type}, '{P_OtherType}', "
         second += $"'{P_CN}', '{P_Brand}', '{TP_ID}', '{TP_PN}', '{Intended_Market}', {Intended_Route1}, '{Intended_Route2}', "
         second += $"{Import}, {Req_Quantity}, '{P_OtherID}', '{P_weight}', '{Order_Req_Quantity}', '{Order_number}');"
         second = second.Replace("''", "null")
@@ -48,6 +48,6 @@ Public Class IRU
     End Function
 
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}', upUI count: {upUI.Length}."
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}', upUI count: {upUI.Length}."
     End Function
 End Class

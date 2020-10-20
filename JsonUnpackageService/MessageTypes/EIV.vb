@@ -40,20 +40,20 @@ Public Class EIV
         output += $"VALUES ('{JsonDatetime.ParseTime(Event_Time).ToMySQL()}','{EO_ID}','{CInt(Invoice_Type1)}','{Invoice_Type2}','{Invoice_Number}','{JsonDatetime.ParseDate(Invoice_Date).ToMySQL()}',"
         output += $"'{Invoice_Seller}','{Invoice_Buyer1}','{Invoice_Buyer2}','{Buyer_Name}','{Buyer_Address}','{Buyer_Address_StreetOne}','{Buyer_Address_StreetTwo}','{Buyer_Address_City}','{Buyer_Address_PostCode}','{Buyer_CountryReg}','{Buyer_TAX_N}','{First_Seller_EU}',"
         output += $"'{String.Join(",", If(Product_Items_1 Is Nothing, New String() {}, Product_Items_1))}','{String.Join(",", If(IsDBNull(Product_Items_2), New Integer() {}, Product_Items_2))}','{(String.Join(",", If(IsDBNull(Product_Price), New Decimal() {}, Product_Price))).Replace(",", ".")}','{Invoice_Net}','{Invoice_Currency}',"
-        output += $"'{Invoice_comment}','{GetJsonIndex}'); "
+        output += $"'{Invoice_comment}','{Code}'); "
         output = output.Replace("''", "null")
         'TODO Finish
         'Relate all UIs to the json
         Select Case UI_Type
             Case AggregationType.Unit_Packets_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldEIV = '{GetJsonIndex}' "
+                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldEIV = '{Code}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", upUIs)}');"
             Case AggregationType.Aggregated_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldEIV = '{GetJsonIndex}' "
+                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldEIV = '{Code}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", aUIs)}');"
             Case AggregationType.Both
                 output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` AS P, `{DBBase.DBName}`.`tblaggregatedcodes` AS A "
-                output += $"SET P.fldEIV = '{GetJsonIndex}', A.fldEIV = '{GetJsonIndex}' "
+                output += $"SET P.fldEIV = '{Code}', A.fldEIV = '{Code}' "
                 output += $"WHERE P.fldPrintCode in ('{String.Join("','", upUIs)}') "
                 output += $"AND A.fldPrintCode in ('{String.Join("','", aUIs)}');"
             Case Else
@@ -63,7 +63,7 @@ Public Class EIV
     End Function
 
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}'"
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}'"
     End Function
 End Class
 

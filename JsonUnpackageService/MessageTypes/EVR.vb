@@ -11,7 +11,7 @@ Public Class EVR
     Public Property aUIs As String()
     Public Property Delivery_comment As String
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}'"
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}'"
     End Function
 End Class
 

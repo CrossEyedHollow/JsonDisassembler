@@ -17,12 +17,12 @@ Public Class EUA
         For i As Integer = 0 To upUI_1.Length - 1
             output += $"WHEN fldCode = '{upUI_2(i)}' THEN '{upUI_1(i)}' "
         Next
-        output += $"end), fldPrintDate = '{ParseTime(Event_Time).ToMySQL()}', fldEUA = {GetJsonIndex} "
+        output += $"end), fldPrintDate = '{ParseTime(Event_Time).ToMySQL()}', fldEUA = '{Code}' "
         output += $"WHERE fldCode IN ('{String.Join("','", upUI_2)}');"
         Return output
     End Function
 
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}'. Printed codes count: {upUI_1.Length}"
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}'. Printed codes count: {upUI_1.Length}"
     End Function
 End Class

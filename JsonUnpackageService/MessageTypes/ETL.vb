@@ -24,7 +24,7 @@ Public Class ETL
     Public Property Transloading_comment As String
 
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}'"
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}'"
     End Function
 End Class
 

@@ -39,19 +39,19 @@ Public Class EDP
         output += "(fldEvent_Time,fldEO_ID,fldF_ID,fldDestID1,fldDestID2,fldDestID3,fldDestID4,fldDestAddress,fldDestinationStreet1,fldDestinationStreet2,fldDestinationCity,fldDestPostCode,fldTransportMode,fldTransportVehicle,fldTransportCont1,fldTransporCont2,fldTransportS1,fldTransportS2,fldEMCS,fldEMCS_ARC,fldSAAD,fldSAAD_Num,fldExpDeclaration,fldExpDeclNumber,fldComment,fldJsonID) "
         output += $"VALUES ('{ParseTime(Event_Time).ToMySQL()}','{EO_ID}','{F_ID}','{Destination_ID1}','{Destination_ID2}',""'{String.Join("','", If(Destination_ID3, New String() {}))}'"",""'{String.Join("','", If(Destination_ID4, New String() {}))}'"",'{Destination_ID5}','{Destination_ID5_Address_StreetOne}','{Destination_ID5_Address_StreetTwo}','{Destination_ID5_Address_City}','{Destination_ID5_Address_PostCode}'," &
             $"'{CInt(Transport_mode)}','{Transport_vehicle}','{Transport_cont1}','{Transport_cont2}','{Transport_s1}','{Transport_s2}'," &
-            $"'{EMCS}','{EMCS_ARC}','{SAAD}','{SAAD_number}','{Exp_Declaration}','{Exp_DeclarationNumber}','{Dispatch_comment}','{GetJsonIndex}'); "
+            $"'{EMCS}','{EMCS_ARC}','{SAAD}','{SAAD_number}','{Exp_Declaration}','{Exp_DeclarationNumber}','{Dispatch_comment}','{Code}'); "
         output = output.Replace("''", "null")
 
         Select Case UI_Type
             Case AggregationType.Unit_Packets_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldEDP = '{GetJsonIndex}' "
+                output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` SET fldEDP = '{Code}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", upUIs)}');"
             Case AggregationType.Aggregated_Only
-                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldEDP = '{GetJsonIndex}' "
+                output += $"UPDATE `{DBBase.DBName}`.`tblaggregatedcodes` SET fldEDP = '{Code}' "
                 output += $"WHERE fldPrintCode in ('{String.Join("','", aUIs)}');"
             Case AggregationType.Both
                 output += $"UPDATE `{DBBase.DBName}`.`tblprimarycodes` AS P, `{DBBase.DBName}`.`tblaggregatedcodes` AS A "
-                output += $"SET P.fldEDP = '{GetJsonIndex}', A.fldEDP = '{GetJsonIndex}' "
+                output += $"SET P.fldEDP = '{Code}', A.fldEDP = '{Code}' "
                 output += $"WHERE P.fldPrintCode in ('{String.Join("','", upUIs)}') "
                 output += $"AND A.fldPrintCode in ('{String.Join("','", aUIs)}');"
             Case Else
@@ -61,7 +61,7 @@ Public Class EDP
     End Function
 
     Public Overrides Function GetReport() As String
-        Return $"{Message_Type} message unpacked. JSON ID: '{GetJsonIndex}'. Dispatched UIs count: { If(upUIs Is Nothing, 0, upUIs.Length) + If(aUIs Is Nothing, 0, aUIs.Length)}"
+        Return $"{Message_Type} message unpacked. JSON ID: '{Code}'. Dispatched UIs count: { If(upUIs Is Nothing, 0, upUIs.Length) + If(aUIs Is Nothing, 0, aUIs.Length)}"
     End Function
 End Class
 
