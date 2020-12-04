@@ -15,5 +15,9 @@ Public Class EPO
     Public Overrides Function GetReport() As String
         Return $"{Message_Type} message unpacked. JSON ID: '{Code}'"
     End Function
+
+    Public Overrides Function GetSqlStatement() As String
+        Return MyBase.GetSqlStatement()
+    End Function
 End Class
 

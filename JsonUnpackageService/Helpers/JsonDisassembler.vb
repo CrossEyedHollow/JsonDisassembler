@@ -45,27 +45,6 @@ Public Class JsonUnpackager
     ''' </summary>
     ''' <returns></returns>
     Shared Function EUA(json As JObject) As EUA
-
-        ''Get variables
-        'Dim EO_ID As String = json("EO_ID")
-        'Dim F_ID As String = json("F_ID")
-        'Dim eventTime As Date = DateTime.ParseExact(json("Event_Time"), TimeFormat, Nothing)
-        'Dim upUI_1 As String() = json.Item("upUI_1").ToObject(Of String())
-        'Dim upUI_2 As String() = json.Item("upUI_2").ToObject(Of String())
-        'Dim comment As String = json("upUI_comment")
-        'Dim recallCode As String = json("Code")
-
-        ''Put variables into structure
-        'Dim output As New EUA() With
-        '{
-        '    .EO_ID = EO_ID,
-        '    .F_ID = F_ID,
-        '    .Event_Time = eventTime,
-        '    .upUI_1 = upUI_1,
-        '    .upUI_2 = upUI_2,
-        '    .upUI_comment = comment,
-        '    .Code = recallCode
-        '}
         Return EUA(json.ToString())
     End Function
     Shared Function EUA(json As String) As EUA
